@@ -13,7 +13,7 @@
         }
 
         .nav-link:hover {
-            color:white !important; /* Gold Hover Color */
+            color:white !important;
             font-weight: bold;
             border-bottom: 2px solid white;
         }
@@ -88,29 +88,21 @@
         </div>
     </div>
     <div id="About" class="container-fluid bg-light text-black" style="padding:50px 20px;">
-    <h1 class="text-center mb-4">About Me</h1>
-    <p>Hi, I’m <strong>Aakash Maddala</strong>, a passionate and dedicated software developer with a strong focus on building modern, responsive, and user-friendly web applications.</p>
-
-    <p>I specialize in <strong>Java, Spring Boot, HTML, CSS, Bootstrap, and JavaScript</strong>, and I’m constantly exploring new technologies to stay updated in this fast-evolving field. I have hands-on experience in developing dynamic and interactive websites, and I enjoy turning complex problems into simple, elegant solutions.</p>
-
-    <p>I take pride in writing clean, efficient, and maintainable code while following best practices and design patterns. I have also worked on mobile application development using Android Studio, where I developed the <strong>SOC Application</strong>, a social networking app that enables real-time user interaction and content sharing.</p>
-
-    <p>Some of the areas I’m actively improving include:
-        <ul>
-            <li>Building scalable websites</li>
-            <li>Developing responsive front-end applications using Bootstrap and modern CSS frameworks</li>
-            <li>Implementing user-friendly designs with a focus on smooth user experience</li>
-        </ul>
-    </p>
-
-    <p>I believe in collaboration, continuous learning, and staying connected with the latest trends in the tech industry. I’m always ready to take on new challenges and contribute effectively to team-driven projects.</p>
-
-    <p>Beyond coding, I am passionate about <strong>reading, writing, exploring new technologies, and participating in tech communities</strong>. I am eager to contribute to impactful projects and work in environments that encourage innovation and growth.</p>
-
-    <p>Let’s connect and build something great together!</p>
-</div>
-
-
+        <h1 class="text-center mb-4">About Me</h1>
+        <p>Hi, I’m <strong>Aakash Maddala</strong>, a passionate and dedicated software developer with a strong focus on building modern, responsive, and user-friendly web applications.</p>
+        <p>I specialize in <strong>Java, Spring Boot, HTML, CSS, Bootstrap, and JavaScript</strong>, and I’m constantly exploring new technologies to stay updated in this fast-evolving field. I have hands-on experience in developing dynamic and interactive websites, and I enjoy turning complex problems into simple, elegant solutions.</p>
+        <p>I take pride in writing clean, efficient, and maintainable code while following best practices and design patterns. I have also worked on mobile application development using Android Studio, where I developed the <strong>SOC Application</strong>, a social networking app that enables real-time user interaction and content sharing.</p>
+        <p>Some of the areas I’m actively improving include:
+            <ul>
+                <li>Building scalable websites</li>
+                <li>Developing responsive front-end applications using Bootstrap and modern CSS frameworks</li>
+                <li>Implementing user-friendly designs with a focus on smooth user experience</li>
+            </ul>
+        </p>
+        <p>I believe in collaboration, continuous learning, and staying connected with the latest trends in the tech industry. I’m always ready to take on new challenges and contribute effectively to team-driven projects.</p>
+        <p>Beyond coding, I am passionate about <strong>reading, writing, exploring new technologies, and participating in tech communities</strong>. I am eager to contribute to impactful projects and work in environments that encourage innovation and growth.</p>
+        <p>Let’s connect and build something great together!</p>
+    </div>
     <div id="Projects" class="container-fluid bg-dark text-white" style="padding:50px 20px;">
         <h1>Project</h1>
         <p>I have completd mini project on SOS application using Android Studios.I used programming languges are java,kotlin,xml,mysql database.</p>
@@ -119,7 +111,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col">
             <div class="card h-30">
-                <img src="https://res.cloudinary.com/dqeshgr8g/image/upload/v1749988981/Screenshot_2025-06-15_at_5.20.48_PM_onho1v.png" class="card-img-top" alt="...">
+                <img src="https://res.cloudinary.com/dqeshgr8g/image/upload/v1749988981/Screenshot_2025-06-15_at_5.20.48_PM_onho1v.png" class="card-img-top" style="max-width: 450px; height: auto;" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Home Screen</h5>
                     <p class="card-text">This Home Screen we have Register number of Your neighbours are parents.I created a default Emergency numbers like <strong>Police,Fire </strong>etc we can also customize buttons </p>
@@ -147,7 +139,7 @@
         </div>
     </div>
     <div id="Contact" class="container-fluid bg-secondary text-white" style="padding:20px 20px;">
-        <div id="Contact" class="container-fluid bg-secondary text-white" style="padding:50px 20px;">
+        <div  class="container-fluid bg-secondary text-white" style="padding:50px 20px;">
         <h1 class="text-center mb-4">Contact Me</h1>
         <p class="text-center mb-5">Feel free to get in touch with me by filling out the form below.</p>
         <div class="row justify-content-center">
@@ -172,6 +164,12 @@
             </div>
         </div>
     </div>
-    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () 
+        {
+            history.replaceState(null, null, window.location.pathname + window.location.search);
+            document.getElementById("Home").scrollIntoView({ behavior: "auto" });
+        });
+    </script>
 </body>
 </html> 
