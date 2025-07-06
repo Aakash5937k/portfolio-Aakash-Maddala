@@ -36,7 +36,7 @@
         .navbar {
             background: #181818 !important;
             backdrop-filter: none;
-            border-bottom: 1px solid #ff0000 !important; /* TEMP: red border for debug */
+            border-bottom: 1px solid #ff0000 !important; 
             transition: all 0.3s ease;
             z-index: 99999 !important;
             box-shadow: 0 2px 12px 0 rgba(0,0,0,0.25);
@@ -51,7 +51,6 @@
             font-size: 1.5rem;
             color: #fff;
             text-shadow: 0 0 8px #00d4ff, 0 0 16px #00d4ff, 0 0 24px #00d4ff66;
-            /* Remove background gradients and text clip */
         }
 
         .nav-link {
@@ -132,10 +131,6 @@
             0% { left: -60%; }
             100% { left: 120%; }
         }
-        .hero-title:hover {
-            /* No hover glow or scale */
-        }
-
         .hero-subtitle {
             font-size: 1.5rem;
             color: #cccccc;
@@ -399,10 +394,8 @@
     </style>
 </head>
 <body>
-    <!-- 3D Background -->
     <div id="threejs-background"></div>
 
-    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#home">
@@ -430,8 +423,6 @@
             </div>
         </div>
     </nav>
-
-    <!-- Hero Section -->
     <section id="home" class="hero-section">
         
         <div class="container">
@@ -454,8 +445,6 @@
             </div>
         </div>
     </section>
-
-    <!-- About Section -->
     <section id="about" class="section">
         <div class="container">
             <h2 class="section-title fade-in">About Me</h2>
@@ -478,8 +467,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Projects Section -->
     <section id="projects" class="section">
         <div class="container">
             <h2 class="section-title fade-in">Projects</h2>
@@ -501,8 +488,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Contact Section -->
     <section id="contact" class="section">
         <div class="container">
             <h2 class="section-title fade-in">Contact Me</h2>
@@ -530,8 +515,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
     <footer class="text-center py-4" style="background: rgba(0, 0, 0, 0.8); border-top: 1px solid rgba(255, 255, 255, 0.1);">
         <div class="container">
             <p>&copy; 2024 Aakash Maddala. All rights reserved.</p>
@@ -544,12 +527,8 @@
     </footer>
 
     <script>
-        // Initialize GSAP ScrollTrigger
         gsap.registerPlugin(ScrollTrigger);
-
-        // Hero Section Animations
         function initializeAnimations() {
-            // Hero content animations
             gsap.from('.hero-title', {
                 duration: 1.5,
                 y: 100,
@@ -589,8 +568,6 @@
                 delay: 0.3,
                 ease: 'back.out(1.7)'
             });
-
-            // Floating elements animation
             gsap.to('.floating-element', {
                 y: -20,
                 rotation: 360,
@@ -600,8 +577,6 @@
                 ease: 'power1.inOut',
                 stagger: 1
             });
-
-            // Scroll animations
             gsap.utils.toArray('.fade-in').forEach(element => {
                 gsap.from(element, {
                     scrollTrigger: {
@@ -617,8 +592,6 @@
                 });
             });
         }
-
-        // Three.js Background
         function initThreeJS() {
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -632,7 +605,6 @@
             renderer.domElement.style.setProperty('z-index', '0', 'important');
             renderer.domElement.style.setProperty('pointer-events', 'none', 'important');
 
-            // Create particles
             const particlesGeometry = new THREE.BufferGeometry();
             const particlesCount = 1000;
             const posArray = new Float32Array(particlesCount * 3);
@@ -655,11 +627,9 @@
 
             camera.position.z = 2;
 
-            // Parallax effect variables
             let targetX = 0, targetY = 0;
             let currentX = 0, currentY = 0;
 
-            // Mouse move event for parallax
             window.addEventListener('mousemove', (e) => {
                 const x = (e.clientX / window.innerWidth) * 2 - 1;
                 const y = (e.clientY / window.innerHeight) * 2 - 1;
@@ -667,10 +637,8 @@
                 targetY = y * 0.3;
             });
 
-            // Animation
             function animate() {
                 requestAnimationFrame(animate);
-                // Smoothly interpolate to target
                 currentX += (targetX - currentX) * 0.05;
                 currentY += (targetY - currentY) * 0.05;
                 particlesMesh.rotation.y = 0.5 * currentX;
@@ -680,7 +648,6 @@
 
             animate();
 
-            // Handle window resize
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
@@ -688,13 +655,11 @@
             });
         }
 
-        // Initialize everything when page loads
         window.addEventListener('load', function() {
             initializeAnimations();
             setTimeout(initThreeJS, 1000);
         });
 
-        // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -708,13 +673,11 @@
             });
         });
 
-        // Form submission
         document.querySelector('form').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('Thank you for your message! I will get back to you soon.');
         });
 
-        // Parallax effect for floating elements
         window.addEventListener('scroll', function() {
             const scrolled = window.pageYOffset;
             const parallax = document.querySelectorAll('.floating-element');
