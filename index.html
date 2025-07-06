@@ -363,6 +363,24 @@
             transform: translateY(0);
         }
 
+        .contact-submit-btn {
+            display: block;
+            margin: 10px auto 0 auto;
+            color: #fff !important;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px 36px;
+            background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+            border: none;
+            border-radius: 7px;
+            box-shadow: 0 2px 10px 0 rgba(0,212,255,0.10);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .contact-submit-btn:hover {
+            background: linear-gradient(90deg, #ff6b6b, #00d4ff);
+            box-shadow: 0 4px 32px 0 rgba(0,212,255,0.18);
+        }
+
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
@@ -505,7 +523,7 @@
                             <textarea class="form-control" id="message" rows="4" placeholder="Write your message here"></textarea>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-light">Send Message</button>
+                            <button type="submit" class="btn btn-primary-custom contact-submit-btn">Send Message</button>
                         </div>
                     </form>
                 </div>
