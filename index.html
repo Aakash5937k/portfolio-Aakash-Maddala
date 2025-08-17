@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aakash Maddala - Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        #threejs-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .navbar {
+            background: #181818 !important;
+            backdrop-filter: none;
+            border-bottom: 1px solid #ff0000 !important; /* TEMP: red border for debug */
+            transition: all 0.3s ease;
+            z-index: 99999 !important;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.25);
+            position: sticky !important;
+            top: 0;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #fff;
+            text-shadow: 0 0 8px #00d4ff, 0 0 16px #00d4ff, 0 0 24px #00d4ff66;
+            /* Remove background gradients and text clip */
+        }
+
+        .nav-link {
+            position: relative;
+            color: #ffffff !important;
+            font-weight: 500;
+            margin: 0 15px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #00d4ff, #ff6b6b, #4ecdc4, #ffb347, #00d4ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 24px #00d4ff99) drop-shadow(0 0 48px #ff6b6b66);
+            position: relative;
+            overflow: hidden;
+            animation: neonPulse 2.5s ease-in-out infinite alternate, gradientMove 8s linear infinite;
+            transition: transform 0.3s cubic-bezier(.4,2,.6,1), filter 0.3s;
+        }
+        @keyframes neonPulse {
+            0% { filter: drop-shadow(0 0 12px #00d4ff99) drop-shadow(0 0 24px #ff6b6b66); }
+            100% { filter: drop-shadow(0 0 32px #00d4ffcc) drop-shadow(0 0 64px #ff6b6bcc); }
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -60%;
+            width: 60%; height: 100%;
+            background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
+            opacity: 0.7;
+            pointer-events: none;
+            animation: glassShimmer 2.8s cubic-bezier(.4,2,.6,1) infinite;
+        }
+        @keyframes glassShimmer {
+            0% { left: -60%; }
+            100% { left: 120%; }
+        }
+       
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #cccccc;
+            margin-bottom: 2rem;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: #999999;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 2.5rem auto 2rem auto;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #00d4ff);
+            transition: left 0.3s ease;
+        }
+
+        .btn-primary-custom:hover::before {
+            left: 0;
+        }
+
+        .btn-primary-custom span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-secondary-custom {
+            background: transparent;
+            border: 2px solid #00d4ff;
+            padding: 13px 28px;
+            border-radius: 50px;
+            color: #00d4ff;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-custom:hover {
+            background: #00d4ff;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .profile-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid transparent;
+            background: #fff;
+            box-shadow: 0 4px 32px 0 rgba(0,0,0,0.25);
+            margin: 2rem auto;
+            display: block !important;
+            opacity: 1 !important;
+            z-index: 10 !important;
+            position: relative; 
+            transition: box-shadow 0.4s, background 0.4s;
+        }
+        .profile-image:hover {
+            box-shadow: 0 0 32px 8px #00d4ff55, 0 8px 40px 0 rgba(0,212,255,0.15);
+            background: rgba(0, 212, 255, 0.08);
+        }
+
+        .section {
+            padding: 80px 0 60px 0;
+            position: relative;
+            background: rgba(20, 20, 20, 0.85);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        #about.section, #projects.section, #contact.section {
+            background: rgba(20, 20, 20, 0.97);
+        }
+        .section, .section * {
+            color: #fff !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .about-content:hover {
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2), 0 0 32px 4px #00d4ff44;
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .skill-item {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 0.5rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            padding: 15px;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            color: white;
+        }
+
+        .form-control::placeholder {
+            color: #cccccc;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .contact-submit-btn {
+            display: block;
+            margin: 10px auto 0 auto;
+            color: #fff !important;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px 36px;
+            background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+            border: none;
+            border-radius: 7px;
+            box-shadow: 0 2px 10px 0 rgba(0,212,255,0.10);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .contact-submit-btn:hover {
+            background: linear-gradient(90deg, #ff6b6b, #00d4ff);
+            box-shadow: 0 4px 32px 0 rgba(0,212,255,0.18);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .profile-image {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Background -->
+    <div id="threejs-background"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                <img src="https://res.cloudinary.com/dqeshgr8g/image/upload/v1749894888/Screenshot_2025-06-14_at_3.20.37_PM-2_ilsmsp.jpg" alt="Logo" style="width:40px; height:40px; border-radius:50%; margin-right:10px; vertical-align:middle;"> 
+                <span style="font-weight:700; font-size:1.5rem; color:#fff; text-shadow:0 0 8px #00d4ff,0 0 16px #00d4ff,0 0 24px #00d4ff66;">Aakash Maddala</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        
+        <div class="container">
+            <div class="hero-content">
+                <img src="https://res.cloudinary.com/dqeshgr8g/image/upload/v1755437005/PHOTO-2025-08-17-18-52-23_e0gqvc.jpg" alt="Aakash Maddala" class="profile-image">
+                <h1 class="hero-title">Aakash Maddala</h1>
+                <p class="hero-subtitle">Full Stack Developer</p>
+                <p class="hero-description">
+                    Passionate software developer specializing in Java, Spring Boot, and modern web technologies. 
+                    Creating innovative solutions with clean, efficient code and beautiful user experiences.
+                </p>
+                <div class="cta-buttons">
+                    <a href="Aakash_Maddala_Resume.pdf" class="btn-primary-custom" download>
+                        <span><i class="fas fa-file-alt me-2"></i>Resume</span>
+                    </a>
+                    <a href="#contact" class="btn-secondary-custom">
+                        <i class="fas fa-envelope me-2"></i>Get In Touch
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title fade-in">About Me</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="about-content fade-in">
+                        <p>Hi, I’m <strong>Aakash Maddala</strong>, a passionate and dedicated software developer with a strong focus on building modern, responsive, and user-friendly web applications.</p>
+                        <p>I have hands-on experience in Java, Spring Boot, HTML, CSS, Bootstrap, and JavaScript, and I’m constantly exploring new technologies to stay updated in this fast-evolving field. I enjoy developing dynamic and interactive websites, and turning complex problems into simple, elegant solutions.</p>
+                        <p>I take pride in writing clean, efficient, and maintainable code while following best practices and design patterns. I have also worked on mobile application development using Android Studio, where I developed the <strong>SOC Application</strong>, a social networking app that enables real-time user interaction and content sharing.</p>
+                        <ul>
+                            <li>Building scalable websites</li>
+                            <li>Developing responsive front-end applications using Bootstrap and modern CSS frameworks</li>
+                            <li>Implementing user-friendly designs with a focus on smooth user experience</li>
+                        </ul>
+                        <p>I believe in collaboration, continuous learning, and staying connected with the latest trends in the tech industry. I’m always ready to take on new challenges and contribute effectively to team-driven projects.</p>
+                        <p>Beyond coding, I am passionate about <strong>reading, writing, exploring new technologies, and participating in tech communities</strong>. I am eager to contribute to impactful projects and work in environments that encourage innovation and growth.</p>
+                        <p>Let’s connect and build something great together!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-title fade-in">Projects</h2>
+            <div class="row">
+                <div class="col-lg-12 mb-4">
+                    <div class="project-card fade-in">
+                        <h4 style="color: #00d4ff;">SOS Application (Android)</h4>
+                        <p><strong>Languages/Tools:</strong> Java, Kotlin, XML, MySQL, Android Studio</p>
+                        <p><strong>Description:</strong> The aim of the project is to develop an Android application that lets its users send notifications in case of an emergency or a panic situation. The users can send multiple text messages and emails on the press of a single button. The phone numbers, email ids and the contents of the text and email messages can be set from within the application. The text messages and emails sent, along with the content, also have the last known location of the user. This is very helpful in tracking the whereabouts of the person. The user can also call authorities directly from within the application, if the nature of the situation demands it. Additionally, the user of the application may allow the app to track their location. If this option is selected, the application fetches the device’s location and stores it in a database. This information is very useful and can be used in a variety of ways. One such use of the location data is from within the Android app where the user can view a map that shows their location history over a period of time for a particular day.</p>
+                    </div>
+                </div>
+                <div class="col-lg-12 mb-4">
+                    <div class="project-card fade-in">
+                        <h4 style="color: #00d4ff;">Student Activity Center</h4>
+                        <p><strong>Languages/Tools:</strong> Java, Spring Boot, MySQL, HTML, CSS, JavaScript</p>
+                        <p><strong>Description:</strong> A web application designed to manage and track student activities, events, and participation. The platform allows students to register for events, view upcoming activities, and track their involvement. Administrators can create, update, and manage events, as well as generate reports on student participation. The system features user authentication, role-based access, and a responsive interface for both students and staff.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title fade-in">Contact Me</h2>
+            <p class="text-center mb-5">Feel free to get in touch with me by filling out the form below.</p>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="4" placeholder="Write your message here"></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary-custom contact-submit-btn">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-4" style="background: rgba(0, 0, 0, 0.8); border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="container">
+            <p>&copy; 2025 Aakash Maddala. All rights reserved.</p>
+            <div class="social-links mt-3">
+                <a href="https://github.com/Aakash5937k" class="text-white me-3" style="font-size: 1.5rem;"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/aakash-maddala-088374253?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BToCrY0%2BxRfaQUUqzfobpfg%3D%3D" class="text-white me-3" style="font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Section Animations
+        function initializeAnimations() {
+            // Hero content animations
+            gsap.from('.hero-title', {
+                duration: 1.5,
+                y: 100,
+                opacity: 0,
+                ease: 'power3.out'
+            });
+
+            gsap.from('.hero-subtitle', {
+                duration: 1.5,
+                y: 50,
+                opacity: 0,
+                delay: 0.3,
+                ease: 'power3.out'
+            });
+
+            gsap.from('.hero-description', {
+                duration: 1.5,
+                y: 50,
+                opacity: 0,
+                delay: 0.6,
+                ease: 'power3.out'
+            });
+
+            gsap.from('.cta-buttons', {
+                duration: 1.5,
+                y: 50,
+                opacity: 0,
+                delay: 0.9,
+                ease: 'power3.out'
+            });
+
+            gsap.from('.profile-image', {
+                duration: 2,
+                scale: 0.5,
+                rotation: 180,
+                opacity: 0,
+                delay: 0.3,
+                ease: 'back.out(1.7)'
+            });
+
+            // Floating elements animation
+            gsap.to('.floating-element', {
+                y: -20,
+                rotation: 360,
+                duration: 3,
+                repeat: -1,
+                yoyo: true,
+                ease: 'power1.inOut',
+                stagger: 1
+            });
+
+            // Scroll animations
+            gsap.utils.toArray('.fade-in').forEach(element => {
+                gsap.from(element, {
+                    scrollTrigger: {
+                        trigger: element,
+                        start: 'top 80%',
+                        end: 'bottom 20%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'power3.out'
+                });
+            });
+        }
+
+        // Three.js Background
+        function initThreeJS() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('threejs-background').appendChild(renderer.domElement);
+            renderer.domElement.style.position = 'fixed';
+            renderer.domElement.style.zIndex = '0';
+            renderer.domElement.style.pointerEvents = 'none';
+            renderer.domElement.style.setProperty('z-index', '0', 'important');
+            renderer.domElement.style.setProperty('pointer-events', 'none', 'important');
+
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1000;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 5;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.005,
+                color: '#00d4ff',
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            camera.position.z = 2;
+
+            // Parallax effect variables
+            let targetX = 0, targetY = 0;
+            let currentX = 0, currentY = 0;
+
+            // Mouse move event for parallax
+            window.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) * 2 - 1;
+                const y = (e.clientY / window.innerHeight) * 2 - 1;
+                targetX = x * 0.3; // adjust multiplier for effect strength
+                targetY = y * 0.3;
+            });
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                // Smoothly interpolate to target
+                currentX += (targetX - currentX) * 0.05;
+                currentY += (targetY - currentY) * 0.05;
+                particlesMesh.rotation.y = 0.5 * currentX;
+                particlesMesh.rotation.x = 0.5 * currentY;
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Initialize everything when page loads
+        window.addEventListener('load', function() {
+            initializeAnimations();
+            setTimeout(initThreeJS, 1000);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! I will get back to you soon.');
+        });
+
+        // Parallax effect for floating elements
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelectorAll('.floating-element');
+            
+            parallax.forEach(element => {
+                const speed = 0.5;
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html> 
